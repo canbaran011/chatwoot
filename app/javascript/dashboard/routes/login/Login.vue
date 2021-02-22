@@ -6,14 +6,12 @@
         :alt="globalConfig.installationName"
         class="hero__logo"
       />
-      <h2 class="hero__title">
-        {{
-          useInstallationName($t('LOGIN.TITLE'), globalConfig.installationName)
-        }}
-      </h2>
+      <h5 class="hero__title">
+        Login to Botart Chatbot
+      </h5>
     </div>
     <div class="row align-center">
-      <div v-if="!email" class="small-12 medium-4 column">
+      <div class="small-12 medium-4 column">
         <form class="login-box column align-self-top" @submit.prevent="login()">
           <div class="column log-in-form">
             <label :class="{ error: $v.credentials.email.$error }">
@@ -47,6 +45,7 @@
               button-class="large expanded"
             >
             </woot-submit-button>
+            <!-- <input type="submit" class="button " v-on:click.prevent="login()" v-bind:value="" > -->
           </div>
         </form>
         <div class="column text-center sigin__footer">
@@ -55,19 +54,16 @@
               {{ $t('LOGIN.FORGOT_PASSWORD') }}
             </router-link>
           </p>
-          <p v-if="showSignupLink()">
-            <router-link to="auth/signup">
-              {{ $t('LOGIN.CREATE_NEW_ACCOUNT') }}
-            </router-link>
-          </p>
+          
         </div>
       </div>
-      <woot-spinner v-else size="" />
     </div>
   </div>
 </template>
 
 <script>
+/* global bus */
+
 import { required, email } from 'vuelidate/lib/validators';
 import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 import WootSubmitButton from '../../components/buttons/FormSubmitButton';
@@ -78,12 +74,6 @@ export default {
     WootSubmitButton,
   },
   mixins: [globalConfigMixin],
-  props: {
-    ssoAuthToken: { type: String, default: '' },
-    redirectUrl: { type: String, default: '' },
-    config: { type: String, default: '' },
-    email: { type: String, default: '' },
-  },
   data() {
     return {
       // We need to initialize the component with any
@@ -115,11 +105,6 @@ export default {
       globalConfig: 'globalConfig/get',
     }),
   },
-  created() {
-    if (this.ssoAuthToken) {
-      this.login();
-    }
-  },
   methods: {
     showAlert(message) {
       // Reset loading, current selected agent
@@ -133,9 +118,8 @@ export default {
     login() {
       this.loginApi.showLoading = true;
       const credentials = {
-        email: this.email ? this.email : this.credentials.email,
+        email: this.credentials.email,
         password: this.credentials.password,
-        sso_auth_token: this.ssoAuthToken,
       };
       this.$store
         .dispatch('login', credentials)
@@ -143,11 +127,6 @@ export default {
           this.showAlert(this.$t('LOGIN.API.SUCCESS_MESSAGE'));
         })
         .catch(response => {
-          // Reset URL Params if the authentication is invalid
-          if (this.email) {
-            window.location = '/app/login';
-          }
-
           if (response && response.status === 401) {
             this.showAlert(this.$t('LOGIN.API.UNAUTH'));
             return;

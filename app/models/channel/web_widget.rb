@@ -2,24 +2,20 @@
 #
 # Table name: channel_web_widgets
 #
-#  id                    :integer          not null, primary key
-#  feature_flags         :integer          default(3), not null
-#  hmac_token            :string
-#  pre_chat_form_enabled :boolean          default(FALSE)
-#  pre_chat_form_options :jsonb
-#  reply_time            :integer          default("in_a_few_minutes")
-#  website_token         :string
-#  website_url           :string
-#  welcome_tagline       :string
-#  welcome_title         :string
-#  widget_color          :string           default("#1f93ff")
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  account_id            :integer
+#  id              :integer          not null, primary key
+#  feature_flags   :integer          default(3), not null
+#  reply_time      :integer          default("in_a_few_minutes")
+#  website_token   :string
+#  website_url     :string
+#  welcome_tagline :string
+#  welcome_title   :string
+#  widget_color    :string           default("#1f93ff")
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  account_id      :integer
 #
 # Indexes
 #
-#  index_channel_web_widgets_on_hmac_token     (hmac_token) UNIQUE
 #  index_channel_web_widgets_on_website_token  (website_token) UNIQUE
 #
 
@@ -34,8 +30,6 @@ class Channel::WebWidget < ApplicationRecord
   belongs_to :account
   has_one :inbox, as: :channel, dependent: :destroy
   has_secure_token :website_token
-  has_secure_token :hmac_token
-
   has_flags 1 => :attachments,
             2 => :emoji_picker,
             :column => 'feature_flags'
@@ -50,12 +44,11 @@ class Channel::WebWidget < ApplicationRecord
   end
 
   def web_widget_script
-    "
-    <script>
+    "<script>
       (function(d,t) {
-        var BASE_URL=\"#{ENV.fetch('FRONTEND_URL', '')}\";
+        var BASE_URL = \"#{ENV.fetch('FRONTEND_URL', '')}\";
         var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        g.src=BASE_URL+\"/packs/js/sdk.js\";
+        g.src= BASE_URL + \"/packs/js/sdk.js\";
         s.parentNode.insertBefore(g,s);
         g.onload=function(){
           window.chatwootSDK.run({
@@ -64,24 +57,21 @@ class Channel::WebWidget < ApplicationRecord
           })
         }
       })(document,\"script\");
-    </script>
-    "
+    </script>"
   end
 
-  def create_contact_inbox(additional_attributes = {})
+  def create_contact_inbox
     ActiveRecord::Base.transaction do
       contact = inbox.account.contacts.create!(
-        name: ::Haikunator.haikunate(1000),
-        additional_attributes: additional_attributes
-      )
-      contact_inbox = ::ContactInbox.create!(
-        contact_id: contact.id,
-        inbox_id: inbox.id,
-        source_id: SecureRandom.uuid
-      )
+        name: 'Guest-' + rand(9999..99999).to_s , 
+        additional_attributes: additional_attributes 
+        )
       contact_inbox
     rescue StandardError => e
       Rails.logger.info e
     end
   end
 end
+
+# name: ::Haikunator.haikunate(1000),
+# additional_attributes: additional_attributes

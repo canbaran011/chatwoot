@@ -2,10 +2,10 @@ class MessageTemplates::HookExecutionService
   pattr_initialize [:message!]
 
   def perform
-    return if inbox.agent_bot_inbox&.active?
+    # return if inbox.agent_bot_inbox&.active?
 
-    ::MessageTemplates::Template::OutOfOffice.new(conversation: conversation).perform if should_send_out_of_office_message?
-    ::MessageTemplates::Template::Greeting.new(conversation: conversation).perform if should_send_greeting?
+    # ::MessageTemplates::Template::OutOfOffice.new(conversation: conversation).perform if should_send_out_of_office_message?
+    # ::MessageTemplates::Template::Greeting.new(conversation: conversation).perform if should_send_greeting?
     ::MessageTemplates::Template::EmailCollect.new(conversation: conversation).perform if should_send_email_collect?
   end
 

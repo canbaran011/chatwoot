@@ -2,17 +2,19 @@
   <div class="card-message chat-bubble agent">
     <img class="media" :src="mediaUrl" />
     <div class="card-body">
-      <h4 class="title">
-        {{ title }}
-      </h4>
+      <h6>
+      <b> {{ title }} </b>  
+      </h6>
       <p class="body">
         {{ description }}
       </p>
-      <card-button
+
+        <card-button
         v-for="action in actions"
         :key="action.id"
         :action="action"
       />
+      
     </div>
   </div>
 </template>
@@ -43,7 +45,9 @@ export default {
     },
     showAvatar: Boolean,
   },
-  computed: {},
+  computed: {
+
+  }
 };
 </script>
 

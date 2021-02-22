@@ -1,17 +1,13 @@
-# if you dont specify locked attribute, the default value will be true
-# which means the particular config will be locked
-- name: INSTALLATION_NAME
-  value: 'Chatwoot'
 - name: LOGO_THUMBNAIL
   value: '/brand-assets/logo_thumbnail.svg'
 - name: LOGO
   value: '/brand-assets/logo.svg'
+- name: INSTALLATION_NAME
+  value: 'botart'
 - name: BRAND_URL
-  value: 'https://www.chatwoot.com'
+  value: 'https://www.botart.com.tr/'
 - name: WIDGET_BRAND_URL
-  value: 'https://www.chatwoot.com'
-- name: BRAND_NAME
-  value: 'Chatwoot'
+  value: 'https://www.botart.com.tr/'
 - name: TERMS_URL
   value: 'https://www.chatwoot.com/terms-of-service'
 - name: PRIVACY_URL
@@ -20,19 +16,11 @@
   value: true
 - name: MAILER_INBOUND_EMAIL_DOMAIN
   value:
-  locked: false
 - name: MAILER_SUPPORT_EMAIL
   value:
-  locked: false
 - name: CREATE_NEW_ACCOUNT_FROM_DASHBOARD
   value: false
-  locked: false
-- name: INSTALLATION_EVENTS_WEBHOOK_URL
-  value:
-  locked: false
-- name: CHATWOOT_INBOX_TOKEN
-  value:
-  locked: false
-- name: CHATWOOT_INBOX_HMAC_KEY
-  value:
-  locked: false
+- name: BRAND_NAME
+  value: 'botart'
+- name: 'INSTALLATION_EVENTS_WEBHOOK_URL'
+  value: 
